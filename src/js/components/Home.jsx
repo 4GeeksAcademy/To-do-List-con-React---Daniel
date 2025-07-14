@@ -1,26 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import Tarea from "./Tarea";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
 
-//create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+	let [NuevaTarea, setNuevaTarea] = useState("");  
+	let [ListaDeTareas, setListaDeTareas] = useState([
+		"Practice Js",
+		"Practice React",
+		"Do some exercice",
+		"Read",
+		"Talk with TLOML",
+	]);
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+	const AgregarTarea = (key) => {
+		if (key === "Enter" && NuevaTarea.trim() !== "") {
+			setListaDeTareas([...ListaDeTareas, NuevaTarea.trim()]);
+			setNuevaTarea(""); 
+		}
+	};
+
+	const BorrarTarea = (index)  => {
+		setListaDeTareas(ListaDeTareas.filter((item, i) => index != i ))
+	};
+
+	return (
+		<div className="text-center fw-bold fs-5">
+			<div>
+				<h1>To Do List</h1>
+				<input
+					onChange={event => setNuevaTarea(event.target.value)}
+					type="text"
+					value={NuevaTarea}
+					onKeyUp={event => AgregarTarea(event.key)}
+				/>				
+			</div>
+			{
+				ListaDeTareas.map((tarea, index) => {
+					return (<Tarea key={index} descripcion={tarea} onDelete={() => BorrarTarea(index)} />) 
+				})
+			}
 		</div>
 	);
 };
