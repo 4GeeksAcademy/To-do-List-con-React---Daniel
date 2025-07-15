@@ -56,8 +56,24 @@ const Home = () => {
 		}
 	};
 
-	const BorrarTarea = (index) => {
-		setListaDeTareas(ListaDeTareas.filter((item, i) => index != i))
+	const BorrarTarea = (id) => {
+		//setListaDeTareas(ListaDeTareas.filter((item, i) => index != i))
+		fetch('https://playground.4geeks.com/todo/todos/' + id , {
+      method: "DELETE",
+      
+    })
+    .then(resp => {
+        console.log(resp.ok); 
+		if (resp.ok){
+			onLoad()			
+		}
+        console.log(resp.status); 
+        return resp.json(); 
+    })
+    .catch(error => {
+        
+        console.log(error);
+    });
 	};
 
 	return (
@@ -73,7 +89,7 @@ const Home = () => {
 			</div>
 			{
 				ListaDeTareas.map((tarea, index) => {
-					return (<Tarea key={index} descripcion={tarea.label} onDelete={() => BorrarTarea(index)} />)
+					return (<Tarea key={index} descripcion={tarea.label} onDelete={() => BorrarTarea(tarea.id)} />)
 				})
 			}
 		</div>
